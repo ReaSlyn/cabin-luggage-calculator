@@ -1,16 +1,17 @@
-/* Root variables */
-:root {
-  --open: "Open Sans", sans-serif;
-  --public: "Public Sans", sans-serif;
-  --mirage: "Mirage Sans", sans-serif;
-}
-
 /* Import fonts */
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&family=Public+Sans&display=swap");
 
 @font-face {
   font-family: "Made Mirage";
   src: url("/fonts/MADE Mirage Bold.otf") format("truetype");
+  font-weight: 700;
+}
+
+/* Root variables */
+:root {
+  --open: "Open Sans", sans-serif;
+  --public: "Public Sans", sans-serif;
+  --mirage: "Made Mirage", sans-serif;
 }
 
 /* CSS RESET */
@@ -51,4 +52,9 @@ p {
   font-family: var(--open);
   font-weight: 600;
   color: black;
+}
+
+body {
+  background: #fbf2e6;
+  overflow-x: hidden;
 }

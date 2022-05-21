@@ -1,0 +1,57 @@
+.container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 85px;
+  margin: 80px 0;
+}
+
+.company {
+  padding: 16px 20px;
+  background: white;
+  border: 1px solid #cccccc;
+  font-family: var(--public);
+  font-weight: 400;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  box-shadow: 0px 3px 12px rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+  width: 323px;
+}
+
+.card h2 {
+  align-self: center;
+  padding: 16px 0;
+}
+
+.card hr {
+  height: 1px;
+  border: none;
+  background: #dddddd;
+}
+
+.itemList {
+  display: flex;
+  flex-direction: column;
+  row-gap: 12px;
+  padding: 24px 16px;
+}
+
+.totalWrapper {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
+}
+
+.total {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}

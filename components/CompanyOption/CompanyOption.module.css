@@ -1,0 +1,53 @@
+.option {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 25px;
+  font-size: 18px;
+  line-height: 23px;
+  font-family: var(--public);
+  font-weight: 400px;
+  position: relative;
+}
+
+.option input {
+  width: 0;
+  height: 0;
+}
+
+.option input:checked {
+  outline: 0;
+  border: 0;
+}
+
+.option input::before {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 0;
+  display: block;
+  width: 25px;
+  height: 25px;
+  border: 1px solid black;
+  border-radius: 50%;
+}
+
+.option input::after {
+  content: "";
+  position: absolute;
+  right: 4px;
+  top: 4px;
+  display: block;
+  display: block;
+  width: 19px;
+  height: 19px;
+  background: black;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.option input:checked::after {
+  opacity: 1;
+}

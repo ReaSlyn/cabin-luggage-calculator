@@ -1,0 +1,156 @@
+.container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 85px;
+  margin: 80px 0;
+}
+
+.selectorContainer {
+  position: relative;
+}
+
+.selector {
+  display: flex;
+  flex-direction: row;
+  column-gap: 24px;
+  padding: 16px 20px;
+  background: white;
+  border: 1px solid #cccccc;
+  cursor: pointer;
+}
+
+.selector p {
+  font-size: 16px;
+  line-height: 16px;
+  font-family: var(--public);
+  font-weight: 400;
+}
+
+.selectorArrow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.selectorArrow > span {
+  width: 10px;
+  height: 1px;
+  background: black;
+  border-radius: 1px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.selectorArrow .left {
+  transform: rotate(45deg);
+}
+
+.selectorArrow .right {
+  margin-left: -3.5px;
+  transform: rotate(-45deg);
+}
+
+.selectorArrow .left.active {
+  transform: rotate(-45deg);
+}
+
+.selectorArrow .right.active {
+  transform: rotate(45deg);
+}
+
+.overlay {
+  position: absolute;
+  top: 52px;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  row-gap: 12px;
+  padding: 16px;
+  background: white;
+  border: 1px solid #cccccc;
+  width: 326px;
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
+}
+
+.overlay.active {
+  visibility: visible;
+  opacity: 1;
+}
+
+.content {
+  display: flex;
+  flex-direction: row;
+  column-gap: 53px;
+  align-items: flex-start;
+}
+
+.content img {
+  margin-top: 220px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  box-shadow: 0px 3px 12px rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+  width: 323px;
+}
+
+.card h2 {
+  align-self: center;
+  padding: 16px 0;
+}
+
+.card hr {
+  height: 1px;
+  border: none;
+  background: #dddddd;
+}
+
+.itemList {
+  display: flex;
+  flex-direction: column;
+  row-gap: 12px;
+  padding: 24px 16px;
+}
+
+.totalWrapper {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
+}
+
+.total {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.overweight {
+  color: #ff5353;
+}
+
+.button {
+  margin: 24px 16px;
+  background: black;
+  opacity: 0.5;
+  display: flex;
+  justify-content: center;
+  padding: 11px 0 12px 0;
+  border-radius: 2px;
+}
+
+.button.active {
+  cursor: pointer;
+  opacity: 1;
+}
+
+.button p {
+  color: white;
+}

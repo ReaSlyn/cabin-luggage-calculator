@@ -1,0 +1,23 @@
+.item {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.itemName::first-letter {
+  text-transform: capitalize;
+}
+
+.weight {
+  color: #000000;
+  opacity: 0.5;
+}
+
+.add {
+  color: #00ad98;
+}
+
+.remove {
+  color: #ff5353;
+}
