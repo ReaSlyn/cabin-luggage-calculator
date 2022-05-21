@@ -1,9 +1,34 @@
-html,
-body {
+/* Root variables */
+:root {
+  --open: "Open Sans", sans-serif;
+  --public: "Public Sans", sans-serif;
+  --mirage: "Mirage Sans", sans-serif;
+}
+
+/* Import fonts */
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&family=Public+Sans&display=swap");
+
+@font-face {
+  font-family: "Made Mirage";
+  src: url("/fonts/MADE Mirage Bold.otf") format("truetype");
+}
+
+/* CSS RESET */
+* {
+  box-sizing: border-box;
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: normal;
+  font-style: normal;
+  font-size: 100%;
 }
 
 a {
@@ -11,6 +36,19 @@ a {
   text-decoration: none;
 }
 
-* {
-  box-sizing: border-box;
+/* Global CSS */
+h2 {
+  font-size: 26px;
+  line-height: 30px;
+  font-weight: 700;
+  font-family: var(--mirage);
+  color: black;
+}
+
+p {
+  font-size: 16px;
+  line-height: 18.4px;
+  font-family: var(--open);
+  font-weight: 600;
+  color: black;
 }
