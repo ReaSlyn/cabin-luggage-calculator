@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100vw;
   row-gap: 85px;
   margin: 80px 0;
 }
@@ -72,6 +73,7 @@
   visibility: hidden;
   opacity: 0;
   transition: all 0.3s ease-in-out;
+  z-index: 1;
 }
 
 .overlay.active {
@@ -88,6 +90,19 @@
 
 .content img {
   margin-top: 220px;
+  animation: grow 2s ease-in-out infinite;
+}
+
+@keyframes grow {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 .card {
@@ -147,6 +162,7 @@
 .button.active {
   cursor: pointer;
   opacity: 1;
+  animation: grow 0.4s ease-in-out;
 }
 
 .button p {
@@ -164,5 +180,18 @@
   .content img {
     margin-top: 0;
     transform: rotate(90deg);
+    animation: grow-mobile 2s ease-in-out infinite;
+  }
+
+  @keyframes grow-mobile {
+    0% {
+      transform: rotate(90deg) scale(1);
+    }
+    50% {
+      transform: rotate(90deg) scale(1.1);
+    }
+    100% {
+      transform: rotate(90deg) scale(1);
+    }
   }
 }

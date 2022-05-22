@@ -7,6 +7,7 @@ import LuggageItem from "../components/LuggageItem/LuggageItem";
 import {useRouter} from "next/router";
 
 function decryptKey(key) {
+  /* Decrypt the key by move back letter by 3 (D --> A) */
   let decryptedKey = "";
   for (let i = 0; i < key.length; i++) {
     decryptedKey += String.fromCharCode(key[i].charCodeAt(0) - 3);
@@ -15,6 +16,7 @@ function decryptKey(key) {
 }
 
 export async function getStaticProps() {
+  /* Get request to fetch the API's data and return them as props */
   const carrier = await axios.get(
     `https://the-offline-bp-back.herokuapp.com/get-carriers?secret_key=${decryptKey(
       "SlfduglhSdvKdxwvGhIudqfh"
@@ -38,11 +40,13 @@ export default function Home({carrier, luggage}) {
   const [maxWeight, setMaxWeight] = useState(0);
   const [inventory, setInventory] = useState([]);
   const [selectedInventory, setSelectedInventory] = useState([]);
-  const [selectedItems, setSelectedItems] = useState([]);
+  const [selectedItems, setSelectedItems] = useState("");
+  const [selectedItemWeight, setSelectedItemWeight] = useState("");
   const [totalWeight, setTotalWeight] = useState(0);
 
   const router = useRouter();
 
+  /* Set the company's max weight*/
   useEffect(() => {
     if (selectedCompany === "") {
       return setMaxWeight(0);
@@ -56,21 +60,27 @@ export default function Home({carrier, luggage}) {
     setMaxWeight(company.limit);
   }, [selectedCompany]);
 
+  /* Set the inventory items available in the API */
   useEffect(() => {
     setInventory(luggage.items);
   }, [luggage]);
 
+  /* Calculate and set the max weight, concatenate items and their weight into string to pass them as query params */
   useEffect(() => {
     let weight = 0;
     let items = "";
+    let itemWeight = "";
     selectedInventory.forEach((selectedItem) => {
       weight += selectedItem.weight;
       items += selectedItem.label + "&";
+      itemWeight += selectedItem.weight + "&";
     });
     items = items.substring(0, items.length - 1);
+    itemWeight = itemWeight.substring(0, itemWeight.length - 1);
 
     setTotalWeight(weight);
     setSelectedItems(items);
+    setSelectedItemWeight(itemWeight);
   }, [selectedInventory]);
 
   return (
@@ -86,7 +96,7 @@ export default function Home({carrier, luggage}) {
             className={styles.selector}
             onClick={() => setSelectorIsOpen((bool) => !bool)}
           >
-            <p>Airlines</p>
+            <p>{selectedCompany ? selectedCompany : "Airlines"}</p>
             <div className={styles.selectorArrow}>
               <span
                 className={
@@ -116,6 +126,7 @@ export default function Home({carrier, luggage}) {
                 key={carrier.label}
                 text={carrier.label}
                 setSelectedCompany={setSelectedCompany}
+                setSelectorIsOpen={setSelectorIsOpen}
               />
             ))}
           </div>
@@ -133,12 +144,14 @@ export default function Home({carrier, luggage}) {
                     weight={item.weight}
                     mode="add"
                     onClickFunc={(item) => {
+                      /* Return the previous selected inventory and add the one clicked on */
                       setSelectedInventory((all) => {
                         let [targetItem] = inventory.filter(
                           (i) => i.label === item
                         );
                         return [...all, targetItem];
                       });
+                      /* Remove the item clicked from the inventory */
                       setInventory((inventory) => {
                         return inventory.filter((inventoryItem) => {
                           return inventoryItem.label !== item;
@@ -168,12 +181,14 @@ export default function Home({carrier, luggage}) {
                       weight={item.weight}
                       mode="remove"
                       onClickFunc={(item) => {
+                        /* Return the previous inventory and add the one clicked on */
                         setInventory((all) => {
                           let [targetItem] = selectedInventory.filter(
                             (i) => i.label === item
                           );
                           return [...all, targetItem];
                         });
+                        /* Remove the item clicked from the selected inventory */
                         setSelectedInventory((inventory) => {
                           return inventory.filter((inventoryItem) => {
                             return inventoryItem.label !== item;
@@ -215,12 +230,14 @@ export default function Home({carrier, luggage}) {
                   : `${styles.button} ${styles.active}`
               }
               onClick={() => {
+                /* If weight is in the limit of the company and there is an item, enable the button */
                 totalWeight > maxWeight || totalWeight === 0
                   ? null
                   : router.push({
                       pathname: "/report",
                       query: {
                         selectedItems,
+                        selectedItemWeight,
                         totalWeight,
                         selectedCompany,
                         maxWeight,

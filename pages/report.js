@@ -1,41 +1,33 @@
 import Head from "next/head";
 import styles from "../styles/Report.module.css";
-import axios from "axios";
 import {useRouter} from "next/router";
 import {useState, useEffect} from "react";
 import ReportItem from "../components/ReportItem/ReportItem";
 
-export async function getStaticProps() {
-  const luggage = await axios.get(
-    "https://the-offline-back.herokuapp.com/api/v2/cabin-luggage-inventory"
-  );
-
-  return {
-    props: {
-      luggage: luggage.data || {},
-    },
-  };
-}
-
-export default function Home({luggage}) {
+export default function Home() {
   const router = useRouter();
-  const {selectedItems, totalWeight, selectedCompany, maxWeight} = router.query;
+  const {
+    selectedItems,
+    selectedItemWeight,
+    totalWeight,
+    selectedCompany,
+    maxWeight,
+  } = router.query;
   const [selectedInventory, setSelectedInventory] = useState([]);
+  const [selectedInventoryWeight, setSelectedInventoryWeight] = useState([]);
 
+  /* Split the string by `&` from the query params to get the items and their weight and push them into an array*/
   useEffect(() => {
     if (selectedItems) {
       selectedItems.split("&").forEach((item) => {
         setSelectedInventory((prevState) => [...prevState, item]);
       });
+
+      selectedItemWeight.split("&").forEach((itemWeight) => {
+        setSelectedInventoryWeight((prevState) => [...prevState, itemWeight]);
+      });
     }
   }, [selectedItems]);
-
-  const itemWeight = (item) => {
-    let [itemObject] = luggage.items.filter((luggageItem) => {
-      return luggageItem.label === item;
-    });
-    return itemObject.weight;
-  };
 
   return (
     <>
@@ -52,8 +44,12 @@ export default function Home({luggage}) {
           <h2>My backpack</h2>
           <hr />
           <div className={styles.itemList}>
-            {selectedInventory.map((item) => (
-              <ReportItem key={item} item={item} weight={itemWeight(item)} />
+            {selectedInventory.map((item, index) => (
+              <ReportItem
+                key={item}
+                item={item}
+                weight={selectedInventoryWeight[index]}
+              />
             ))}
           </div>
           <hr />
