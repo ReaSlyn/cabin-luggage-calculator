@@ -91,105 +91,69 @@ export default function Home({carrier, luggage}) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.container}>
-        <div className={styles.selectorContainer}>
-          <div
-            className={styles.selector}
-            onClick={() => setSelectorIsOpen((bool) => !bool)}
-          >
-            <p>{selectedCompany ? selectedCompany : "Airlines"}</p>
-            <div className={styles.selectorArrow}>
-              <span
-                className={
-                  selectorIsOpen
-                    ? `${styles.left} ${styles.active}`
-                    : styles.left
-                }
-              ></span>
-              <span
-                className={
-                  selectorIsOpen
-                    ? `${styles.right} ${styles.active}`
-                    : styles.right
-                }
-              ></span>
-            </div>
-          </div>
-          <div
-            className={
-              selectorIsOpen
-                ? `${styles.active} ${styles.overlay}`
-                : styles.overlay
-            }
-          >
-            {carrier.message.map((carrier) => (
-              <CompanyOption
-                key={carrier.label}
-                text={carrier.label}
-                setSelectedCompany={setSelectedCompany}
-                setSelectorIsOpen={setSelectorIsOpen}
-              />
-            ))}
-          </div>
-        </div>
-        <div className={styles.content}>
-          <div className={styles.card}>
-            <h2>Inventory</h2>
-            <hr />
-            <div className={styles.itemList}>
-              {inventory.length > 0 ? (
-                inventory.map((item) => (
-                  <LuggageItem
-                    key={item.label}
-                    item={item.label}
-                    weight={item.weight}
-                    mode="add"
-                    onClickFunc={(item) => {
-                      /* Return the previous selected inventory and add the one clicked on */
-                      setSelectedInventory((all) => {
-                        let [targetItem] = inventory.filter(
-                          (i) => i.label === item
-                        );
-                        return [...all, targetItem];
-                      });
-                      /* Remove the item clicked from the inventory */
-                      setInventory((inventory) => {
-                        return inventory.filter((inventoryItem) => {
-                          return inventoryItem.label !== item;
-                        });
-                      });
-                    }}
-                  />
-                ))
-              ) : (
-                <p>No item available...</p>
-              )}
-            </div>
-          </div>
-          <img src="svg/arrow.svg" alt="arrow" />
-          <div className={styles.card}>
-            <h2>Selected</h2>
-            <hr />
+        <div className={styles.centerColumn}>
+          <div className={styles.selectorContainer}>
             <div
-              className={styles.itemList}
-              style={selectedInventory.length === 0 ? {height: "328px"} : null}
+              className={styles.selector}
+              onClick={() => setSelectorIsOpen((bool) => !bool)}
             >
-              {selectedInventory.length > 0
-                ? selectedInventory.map((item) => (
+              <p>{selectedCompany ? selectedCompany : "Airlines"}</p>
+              <div className={styles.selectorArrow}>
+                <span
+                  className={
+                    selectorIsOpen
+                      ? `${styles.left} ${styles.active}`
+                      : styles.left
+                  }
+                ></span>
+                <span
+                  className={
+                    selectorIsOpen
+                      ? `${styles.right} ${styles.active}`
+                      : styles.right
+                  }
+                ></span>
+              </div>
+            </div>
+            <div
+              className={
+                selectorIsOpen
+                  ? `${styles.active} ${styles.overlay}`
+                  : styles.overlay
+              }
+            >
+              {carrier.message.map((carrier) => (
+                <CompanyOption
+                  key={carrier.label}
+                  text={carrier.label}
+                  setSelectedCompany={setSelectedCompany}
+                  setSelectorIsOpen={setSelectorIsOpen}
+                />
+              ))}
+            </div>
+          </div>
+          <div className={styles.content}>
+            <div className={styles.card}>
+              <h2>Inventory</h2>
+              <hr />
+              <div className={styles.itemList}>
+                {inventory.length > 0 ? (
+                  inventory.map((item) => (
                     <LuggageItem
-                      key={`selected ${item.label}`}
+                      key={item.label}
                       item={item.label}
                       weight={item.weight}
-                      mode="remove"
+                      mode="add"
                       onClickFunc={(item) => {
-                        /* Return the previous inventory and add the one clicked on */
-                        setInventory((all) => {
-                          let [targetItem] = selectedInventory.filter(
+                        /* Return the previous selected inventory and add the one clicked on */
+                        setSelectedInventory((all) => {
+                          let [targetItem] = inventory.filter(
                             (i) => i.label === item
                           );
                           return [...all, targetItem];
                         });
-                        /* Remove the item clicked from the selected inventory */
-                        setSelectedInventory((inventory) => {
+                        /* Remove the item clicked from the inventory */
+                        setInventory((inventory) => {
                           return inventory.filter((inventoryItem) => {
                             return inventoryItem.label !== item;
                           });
@@ -197,55 +161,99 @@ export default function Home({carrier, luggage}) {
                       }}
                     />
                   ))
-                : null}
-            </div>
-            <hr />
-            <div className={styles.totalWrapper}>
-              <div className={styles.total}>
-                <p>Total</p>
-                <p
-                  className={totalWeight > maxWeight ? styles.overweight : null}
-                >
-                  {totalWeight >= 1000
-                    ? `${totalWeight / 1000}kg`
-                    : `${totalWeight}g`}
-                </p>
-              </div>
-              <div className={styles.total}>
-                <p>Max</p>
-                <p
-                  className={totalWeight > maxWeight ? styles.overweight : null}
-                >
-                  {maxWeight >= 1000
-                    ? `${maxWeight / 1000}kg`
-                    : `${maxWeight}g`}
-                </p>
+                ) : (
+                  <p>No item available...</p>
+                )}
               </div>
             </div>
-            <hr />
-            <div
-              className={
-                totalWeight > maxWeight || totalWeight === 0
-                  ? `${styles.button}`
-                  : `${styles.button} ${styles.active}`
-              }
-              onClick={() => {
-                /* If weight is in the limit of the company and there is an item, enable the button */
-                totalWeight > maxWeight || totalWeight === 0
-                  ? null
-                  : router.push({
-                      pathname: "/report",
-                      query: {
-                        selectedItems,
-                        selectedItemWeight,
-                        totalWeight,
-                        selectedCompany,
-                        maxWeight,
-                      },
-                    });
-              }}
-            >
-              <p>See resume</p>
+            <img src="svg/arrow.svg" alt="arrow" />
+            <div className={styles.card}>
+              <h2>Selected</h2>
+              <hr />
+              <div
+                className={styles.itemList}
+                style={
+                  selectedInventory.length === 0 ? {height: "328px"} : null
+                }
+              >
+                {selectedInventory.length > 0
+                  ? selectedInventory.map((item) => (
+                      <LuggageItem
+                        key={`selected ${item.label}`}
+                        item={item.label}
+                        weight={item.weight}
+                        mode="remove"
+                        onClickFunc={(item) => {
+                          /* Return the previous inventory and add the one clicked on */
+                          setInventory((all) => {
+                            let [targetItem] = selectedInventory.filter(
+                              (i) => i.label === item
+                            );
+                            return [...all, targetItem];
+                          });
+                          /* Remove the item clicked from the selected inventory */
+                          setSelectedInventory((inventory) => {
+                            return inventory.filter((inventoryItem) => {
+                              return inventoryItem.label !== item;
+                            });
+                          });
+                        }}
+                      />
+                    ))
+                  : null}
+              </div>
+              <hr />
+              <div className={styles.totalWrapper}>
+                <div className={styles.total}>
+                  <p>Total</p>
+                  <p
+                    className={
+                      totalWeight > maxWeight ? styles.overweight : null
+                    }
+                  >
+                    {totalWeight >= 1000
+                      ? `${totalWeight / 1000}kg`
+                      : `${totalWeight}g`}
+                  </p>
+                </div>
+                <div className={styles.total}>
+                  <p>Max</p>
+                  <p
+                    className={
+                      totalWeight > maxWeight ? styles.overweight : null
+                    }
+                  >
+                    {maxWeight >= 1000
+                      ? `${maxWeight / 1000}kg`
+                      : `${maxWeight}g`}
+                  </p>
+                </div>
+              </div>
+              <hr />
+              <div
+                className={
+                  totalWeight > maxWeight || totalWeight === 0
+                    ? `${styles.button}`
+                    : `${styles.button} ${styles.active}`
+                }
+                onClick={() => {
+                  /* If weight is in the limit of the company and there is an item, enable the button */
+                  totalWeight > maxWeight || totalWeight === 0
+                    ? null
+                    : router.push({
+                        pathname: "/report",
+                        query: {
+                          selectedItems,
+                          selectedItemWeight,
+                          totalWeight,
+                          selectedCompany,
+                          maxWeight,
+                        },
+                      });
+                }}
+              >
+                <p>See resume</p>
+              </div>
             </div>
           </div>
         </div>

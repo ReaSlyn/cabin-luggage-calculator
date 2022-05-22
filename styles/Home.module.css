@@ -3,8 +3,14 @@
   flex-direction: column;
   align-items: center;
   width: 100vw;
-  row-gap: 85px;
   margin: 80px 0;
+}
+
+.centerColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 85px;
 }
 
 .selectorContainer {
@@ -170,6 +176,10 @@
 }
 
 @media screen and (max-width: 820px) {
+  .selectorContainer {
+    align-self: flex-start;
+  }
+
   .content {
     display: flex;
     flex-direction: column;
