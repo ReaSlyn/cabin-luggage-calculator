@@ -15,26 +15,9 @@ function decryptKey(key) {
   return decryptedKey;
 }
 
-export async function getStaticProps() {
-  /* Get request to fetch the API's data and return them as props */
-  const carrier = await axios.get(
-    `https://the-offline-bp-back.herokuapp.com/get-carriers?secret_key=${decryptKey(
-      "SlfduglhSdvKdxwvGhIudqfh"
-    )}`
-  );
-  const luggage = await axios.get(
-    "https://the-offline-back.herokuapp.com/api/v2/cabin-luggage-inventory"
-  );
-
-  return {
-    props: {
-      carrier: carrier.data || {},
-      luggage: luggage.data || {},
-    },
-  };
-}
-
-export default function Home({carrier, luggage}) {
+export default function Home() {
+  const [carrier, setCarrier] = useState();
+  const [luggage, setLuggage] = useState();
   const [selectorIsOpen, setSelectorIsOpen] = useState(false);
   const [selectedCompany, setSelectedCompany] = useState("");
   const [maxWeight, setMaxWeight] = useState(0);
@@ -45,6 +28,28 @@ export default function Home({carrier, luggage}) {
   const [totalWeight, setTotalWeight] = useState(0);
 
   const router = useRouter();
+
+  useEffect(() => {
+    /* Fetch the API's data and set it to the state */
+    axios
+      .get(
+        `https://the-offline-bp-back.herokuapp.com/get-carriers?secret_key=${decryptKey(
+          "SlfduglhSdvKdxwvGhIudqfh"
+        )}`
+      )
+      .then((res) => {
+        setCarrier(res.data);
+      });
+
+    /* Fetch the API's data and set it to the state */
+    axios
+      .get(
+        "https://the-offline-back.herokuapp.com/api/v2/cabin-luggage-inventory"
+      )
+      .then((res) => {
+        setLuggage(res.data);
+      });
+  }, []);
 
   /* Set the company's max weight*/
   useEffect(() => {
@@ -62,7 +67,7 @@ export default function Home({carrier, luggage}) {
 
   /* Set the inventory items available in the API */
   useEffect(() => {
-    setInventory(luggage.items);
+    luggage ? setInventory(luggage.items) : null;
   }, [luggage]);
 
   /* Calculate and set the max weight, concatenate items and their weight into string to pass them as query params */
@@ -122,14 +127,16 @@ export default function Home({carrier, luggage}) {
                   : styles.overlay
               }
             >
-              {carrier.message.map((carrier) => (
-                <CompanyOption
-                  key={carrier.label}
-                  text={carrier.label}
-                  setSelectedCompany={setSelectedCompany}
-                  setSelectorIsOpen={setSelectorIsOpen}
-                />
-              ))}
+              {carrier
+                ? carrier.message.map((carrier) => (
+                    <CompanyOption
+                      key={carrier.label}
+                      text={carrier.label}
+                      setSelectedCompany={setSelectedCompany}
+                      setSelectorIsOpen={setSelectorIsOpen}
+                    />
+                  ))
+                : null}
             </div>
           </div>
           <div className={styles.content}>
@@ -137,32 +144,38 @@ export default function Home({carrier, luggage}) {
               <h2>Inventory</h2>
               <hr />
               <div className={styles.itemList}>
-                {inventory.length > 0 ? (
-                  inventory.map((item) => (
-                    <LuggageItem
-                      key={item.label}
-                      item={item.label}
-                      weight={item.weight}
-                      mode="add"
-                      onClickFunc={(item) => {
-                        /* Return the previous selected inventory and add the one clicked on */
-                        setSelectedInventory((all) => {
-                          let [targetItem] = inventory.filter(
-                            (i) => i.label === item
-                          );
-                          return [...all, targetItem];
-                        });
-                        /* Remove the item clicked from the inventory */
-                        setInventory((inventory) => {
-                          return inventory.filter((inventoryItem) => {
-                            return inventoryItem.label !== item;
+                {luggage ? (
+                  inventory.length > 0 ? (
+                    inventory.map((item) => (
+                      <LuggageItem
+                        key={item.label}
+                        item={item.label}
+                        weight={item.weight}
+                        mode="add"
+                        onClickFunc={(item) => {
+                          /* Return the previous selected inventory and add the one clicked on */
+                          setSelectedInventory((all) => {
+                            let [targetItem] = inventory.filter(
+                              (i) => i.label === item
+                            );
+                            return [...all, targetItem];
                           });
-                        });
-                      }}
-                    />
-                  ))
+                          /* Remove the item clicked from the inventory */
+                          setInventory((inventory) => {
+                            return inventory.filter((inventoryItem) => {
+                              return inventoryItem.label !== item;
+                            });
+                          });
+                        }}
+                      />
+                    ))
+                  ) : (
+                    <p>No item available...</p>
+                  )
                 ) : (
-                  <p>No item available...</p>
+                  <div className={styles.loading}>
+                    <img src="svg/loading.svg" alt="loading" />
+                  </div>
                 )}
               </div>
             </div>

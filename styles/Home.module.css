@@ -94,7 +94,7 @@
   align-items: flex-start;
 }
 
-.content img {
+.content > img {
   margin-top: 220px;
   animation: grow 2s ease-in-out infinite;
 }
@@ -108,6 +108,25 @@
   }
   100% {
     transform: scale(1);
+  }
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  padding: 117px 0 180px 0;
+}
+
+.loading > img {
+  animation: loading 1s linear infinite;
+}
+
+@keyframes loading {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }
 
@@ -187,7 +206,7 @@
     align-items: center;
   }
 
-  .content img {
+  .content > img {
     margin-top: 0;
     transform: rotate(90deg);
     animation: grow-mobile 2s ease-in-out infinite;
