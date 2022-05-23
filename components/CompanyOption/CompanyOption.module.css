@@ -9,6 +9,7 @@
   font-family: var(--public);
   font-weight: 400px;
   position: relative;
+  cursor: pointer;
 }
 
 .option input {
