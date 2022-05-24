@@ -15,6 +15,7 @@
 .option input {
   width: 0;
   height: 0;
+  appearance: none;
 }
 
 .option input:checked {
